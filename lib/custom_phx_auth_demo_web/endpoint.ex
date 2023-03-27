@@ -6,6 +6,7 @@ defmodule CustomPhxAuthDemoWeb.Endpoint do
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
+    http_only: true,
     key: "_custom_phx_auth_demo_key",
     signing_salt: "kExF/Fld",
     same_site: "Lax"

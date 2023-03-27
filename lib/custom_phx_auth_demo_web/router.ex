@@ -5,10 +5,16 @@ defmodule CustomPhxAuthDemoWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", CustomPhxAuthDemoWeb do
-    pipe_through :api
+  pipeline :auth do
+    plug :fetch_session
+    plug :put_secure_browser_headers
+  end
 
-    get "/", MockController, :index
+  scope "/", CustomPhxAuthDemoWeb do
+    pipe_through [:api, :auth]
+
+    post "/auth/:token", AuthController, :auth
+    post "/signup/email", SignUpController, :email
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
