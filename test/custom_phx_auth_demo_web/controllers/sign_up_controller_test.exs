@@ -16,7 +16,7 @@ defmodule CustomPhxAuthDemoWeb.SignUpControllerTest do
     assert resp["family_name"] == user_data.family_name
   end
 
-  test "it should fail is user data is invalid", %{conn: conn} do
+  test "it should fail if user data is invalid", %{conn: conn} do
     user_data = %{first_name: "j", last_name: "b", email: "f"}
 
     conn = post(conn, ~p"/signup/email", user_data)
