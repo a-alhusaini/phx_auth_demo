@@ -10,7 +10,12 @@ defmodule CustomPhxAuthDemo.User do
     field :is_verified, :boolean, default: false
   end
 
-  def changeset(user, params) do
+  def create_user(user_data) do
+    changeset(%__MODULE__{}, user_data)
+    |> CustomPhxAuthDemo.Repo.insert()
+  end
+
+  defp changeset(user, params) do
     user
     |> Ecto.Changeset.cast(params, [:first_name, :family_name, :email, :is_verified])
     |> Ecto.Changeset.validate_required([:first_name, :family_name, :email, :is_verified])

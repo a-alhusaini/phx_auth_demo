@@ -1,9 +1,9 @@
 defmodule CustomPhxAuthDemo.Token do
-  def generate_token(data) do
+  def generate(data) do
     Phoenix.Token.encrypt(context(), secret_key(), data)
   end
 
-  def decode_token(token, opts \\ []) do
+  def decode(token, opts \\ []) do
     Phoenix.Token.decrypt(context(), secret_key(), token, opts)
   end
 
@@ -12,6 +12,6 @@ defmodule CustomPhxAuthDemo.Token do
   end
 
   defp secret_key() do
-    Application.get_env(:custom_phx_auth_demo, CustomPhxAuthDemoWeb.Endpoint)
+    Application.get_env(:custom_phx_auth_demo, CustomPhxAuthDemoWeb.Endpoint)[:secret_key_base]
   end
 end

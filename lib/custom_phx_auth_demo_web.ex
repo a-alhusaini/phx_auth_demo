@@ -44,6 +44,8 @@ defmodule CustomPhxAuthDemoWeb do
       import Plug.Conn
       import CustomPhxAuthDemoWeb.Gettext
 
+      action_fallback CustomPhxAuthDemoWeb.FallbackController
+
       unquote(verified_routes())
     end
   end

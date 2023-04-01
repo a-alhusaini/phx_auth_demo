@@ -1,12 +1,7 @@
 defmodule CustomPhxAuthDemo.UserMailer do
   import Swoosh.Email
 
-  def sign_in_email() do
-    token =
-      Phoenix.Token.sign(CustomPhxAuthDemoWeb.Endpoint, "email_auth", %{
-        magic_link: Ecto.UUID.generate()
-      })
-
+  def sign_in_email(token) do
     new()
     |> to({"fancyman", "fancymailservice@mail.com"})
     |> from({"SCP-682", "ihatelife@mail.com"})
