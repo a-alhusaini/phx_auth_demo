@@ -1,9 +1,9 @@
 defmodule CustomPhxAuthDemo.UserMailer do
   import Swoosh.Email
 
-  def sign_in_email(token) do
+  def sign_in_email(token, first_name, address) do
     new()
-    |> to({"fancyman", "fancymailservice@mail.com"})
+    |> to({first_name, address})
     |> from({"SCP-682", "ihatelife@mail.com"})
     |> subject("Sign in")
     |> text_body("""

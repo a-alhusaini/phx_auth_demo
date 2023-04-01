@@ -6,7 +6,7 @@ defmodule CustomPhxAuthDemoWeb.SignUpController do
              is_map_key(params, "email") do
     with {:ok, user} <- CustomPhxAuthDemo.User.create_user(params) do
       CustomPhxAuthDemo.Token.generate(%{token: Ecto.UUID.generate()})
-      |> CustomPhxAuthDemo.UserMailer.sign_in_email()
+      |> CustomPhxAuthDemo.UserMailer.sign_in_email(user.first_name, user.email)
       |> CustomPhxAuthDemo.Mailer.deliver()
 
       conn
