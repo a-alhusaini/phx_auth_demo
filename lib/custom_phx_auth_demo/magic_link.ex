@@ -1,6 +1,8 @@
 defmodule CustomPhxAuthDemo.MagicLink do
   use Ecto.Schema
 
+  alias CustomPhxAuthDemo.Repo
+
   schema "magic_links" do
     field :token, :string, default: Ecto.UUID.generate()
     belongs_to :user, CustomPhxAuthDemo.User
@@ -10,7 +12,19 @@ defmodule CustomPhxAuthDemo.MagicLink do
 
   def create_magic_link(magic_link_data) do
     changeset(%__MODULE__{}, magic_link_data)
-    |> CustomPhxAuthDemo.Repo.insert()
+    |> Repo.insert()
+  end
+
+  def get(token) do
+    result =
+      Repo.get_by(__MODULE__, token: token)
+      |> Repo.preload(:user)
+
+    if result == nil do
+      {:error, nil}
+    else
+      {:ok, result}
+    end
   end
 
   def generate_magic_link_token(magic_link_string) do

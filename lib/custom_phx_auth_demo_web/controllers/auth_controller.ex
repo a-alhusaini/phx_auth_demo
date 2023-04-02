@@ -1,14 +1,14 @@
 defmodule CustomPhxAuthDemoWeb.AuthController do
   use CustomPhxAuthDemoWeb, :controller
+  alias CustomPhxAuthDemo.MagicLink
 
   def auth(conn, params) do
-    case Phoenix.Token.verify(conn, "email_auth", params["token"]) do
-      {:ok, _} ->
-        json(conn, %{success: true})
-
-      {:error, _} ->
-        put_view(conn, CustomPhxAuthDemoWeb.ErrorJSON)
-        |> render("403.json")
+    with {:ok, token} <- CustomPhxAuthDemo.MagicLink.decode_magic_link_token(params["token"]),
+         {:ok, magic_link} <- MagicLink.get(token) do
+      put_session(conn, :user_id, magic_link.user.email)
+      |> json(%{success: true})
+    else
+      _ -> {:error, :unauthorized}
     end
   end
 end

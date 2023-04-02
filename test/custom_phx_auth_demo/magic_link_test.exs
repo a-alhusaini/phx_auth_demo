@@ -22,6 +22,17 @@ defmodule CustomPhxAuthDemo.MagicLinkTest do
     assert magic_link.user_id == user.id
   end
 
+  test "It can get magic links by token" do
+    {:ok, user} = User.create_user(@user)
+    {:ok, magic_link} = MagicLink.create_magic_link(%{token: @token, user_id: user.id})
+
+    {:ok, found_link} = MagicLink.get(magic_link.token)
+    {:error, nonexistent_link} = MagicLink.get("fake")
+
+    assert found_link.token == @token
+    assert nonexistent_link == nil
+  end
+
   test "It should generate and decode encrypted tokens" do
     encrypted_token = MagicLink.generate_magic_link_token(@token)
 

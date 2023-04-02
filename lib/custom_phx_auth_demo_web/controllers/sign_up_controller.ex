@@ -1,11 +1,15 @@
 defmodule CustomPhxAuthDemoWeb.SignUpController do
   use CustomPhxAuthDemoWeb, :controller
 
-  def email(conn, params)
-      when is_map_key(params, "first_name") and is_map_key(params, "family_name") and
-             is_map_key(params, "email") do
+  def email(conn, %{"first_name" => _, "family_name" => _, "email" => _} = params) do
     with {:ok, user} <- CustomPhxAuthDemo.User.create_user(params) do
-      CustomPhxAuthDemo.Token.generate(%{token: Ecto.UUID.generate()})
+      {:ok, magic_link} =
+        CustomPhxAuthDemo.MagicLink.create_magic_link(%{
+          token: Ecto.UUID.generate(),
+          user_id: user.id
+        })
+
+      CustomPhxAuthDemo.MagicLink.generate_magic_link_token(magic_link.token)
       |> CustomPhxAuthDemo.UserMailer.sign_in_email(user.first_name, user.email)
       |> CustomPhxAuthDemo.Mailer.deliver()
 

@@ -32,4 +32,10 @@ defmodule CustomPhxAuthDemoWeb.SignUpControllerTest do
     assert name == @user_data.first_name
     assert email_address == @user_data.email
   end
+
+  test "it should create a magic link token on sign up", %{conn: conn} do
+    post(conn, ~p"/signup/email", @user_data)
+
+    assert CustomPhxAuthDemo.Repo.all(CustomPhxAuthDemo.MagicLink) !== []
+  end
 end
